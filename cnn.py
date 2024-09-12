@@ -5,9 +5,10 @@ import cv2
 import time
 import argparse
 import json
+from torchvision.models.detection import FasterRCNN_ResNet50_FPN_Weights
 
 # Load the pre-trained Faster R-CNN model
-model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+model = torchvision.models.detection.fasterrcnn_resnet50_fpn(weights=FasterRCNN_ResNet50_FPN_Weights.DEFAULT)
 model.eval()  # Set to evaluation mode
 
 # Check if GPU is available
@@ -78,6 +79,10 @@ def visualize_detections(image, boxes, labels, scores):
     ]
 
     for i, box in enumerate(boxes):
+        # Check if label index is within the valid range
+        if labels[i] >= len(COCO_INSTANCE_CATEGORY_NAMES):
+            print(f"Warning: Label index {labels[i]} is out of range.")
+            continue  # Skip this detection
         label = COCO_INSTANCE_CATEGORY_NAMES[labels[i]]
         score = scores[i]
         x1, y1, x2, y2 = map(int, box)

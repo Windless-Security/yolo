@@ -5,9 +5,10 @@ import time
 import argparse
 import json
 from torchvision import transforms
+from torchvision.models.detection import SSD300_VGG16_Weights
 
 # Load the pre-trained SSD model (SSD with VGG16 backbone)
-model = torchvision.models.detection.ssd300_vgg16(pretrained=True)
+model = torchvision.models.detection.ssd300_vgg16(weights=SSD300_VGG16_Weights.DEFAULT)
 model.eval()  # Set to evaluation mode
 
 # Check if GPU is available
@@ -97,7 +98,9 @@ def run_video_detection(video_source=0, threshold=0.5, log_file="ssd_log.json"):
     Log results per frame.
     """
     if isinstance(video_source, str):
-        video_source = video_source.replace('\\', '/')  # Correct path for Windows
+        video_source = video_source.replace('\\', '/')
+        if video_source.isdigit():
+            video_source = int(video_source)
 
     cap = cv2.VideoCapture(video_source)
 
