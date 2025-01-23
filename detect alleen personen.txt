@@ -1,0 +1,5 @@
+python detect.py --source 0 --weights yolov5s.pt --classes 0
+classes 0 is op personen gericht
+
+Om te zorgen dat ook voertuigen meegenomen worden kan je de volgende argumenten gebruiken.
+--classes 0 2 5 7
